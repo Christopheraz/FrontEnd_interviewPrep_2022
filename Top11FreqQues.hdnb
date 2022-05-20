@@ -1,6 +1,6 @@
 #前端面试手写题整理
 
-1.防抖
+1. 防抖
 
 ```js
 function debounce(func, ms = 1000) {
@@ -23,7 +23,7 @@ const debouncetask = debounce(task, 1000);
 // window.addEventListener('scroll', debounceTask)
 ```
 
-2.节流
+2. 节流
 
 ```js
 function throttle(func, ms = 1000) {
@@ -45,3 +45,21 @@ const task = () => {
 const throttleTask = throttle(task, 1000);
 // window.addEventListener('scroll', throttleTask);
 ```
+
+3. New
+
+4. Blind 
+
+5. Call 
+
+6. Apply
+
+7. 柯里化：只传递给函数一部分参数来调用他，让他返回一个汗水去处理剩下的参数
+
+8. 图片懒加载
+
+9. 对象扁平化
+
+10. 数组扁平化
+
+11. 异步并发数限制
