@@ -48,15 +48,139 @@ const throttleTask = throttle(task, 1000);
 
 3. New
 
+```js
+function myNew(func, args) {
+    const instance = {};
+    if (func.prototype) {
+        Object.setPrototypeOf(instance, func.prototype)
+    }
+    const res = func.apply(instance, args);
+    if (typeof res === "function" || (typeof res === "object" && res !== null)) {
+        return res;
+    }
+}
+
+//test
+function Person(name) {
+    this.name = name;
+}
+Person.prototype.sayName = function() {
+    console.log(`My name is ${this.name}`);
+}
+const me = myNew(Person, 'Jack');
+me.sayName();
+console.log(me);
+```
+
 4. Blind 
+
+```js
+Function.prototype.myBind = function (context = globalThis) {
+    const fn = this;
+    const args = Array.from(arguments).slice(1);
+    const newFunc = function() {
+        const newArgs = args.concat(...arguments);
+        if (this instanceof newFunc) {
+            //通过new调用，绑定this为实力对象
+            fn.apply(this, newArgs);
+        }
+    }
+    //支持new调用方式
+    newFunc.prototype = Object.create(fn.prototype);
+    return newFunc;
+}
+
+//test
+const me = {name: 'Jack'};
+const other = {name: 'Jackson'};
+function say() {
+    console.log(`My name is ${this.name || 'default'}`);
+}
+const meSay = say.myBind(me);
+meSay();
+const otherSay = say.myBind(other);
+otherSay();
+```
 
 5. Call 
 
+```js
+Function.prototype.myCall = function(context = globalThis) {
+    //关键步骤：在context上调用方法，触发this绑定为context， 使用Symbol防止原有属性覆盖
+    const key = Symbol('key');
+    context[key] = this;
+    //es5中可通过for遍历arguments得到参数数组
+    const args = [...arguments].slice(1);
+    const res = context[key](...args);
+    delete context[key];
+    return res;
+}
+
+//test
+const me = {name: 'Jack'};
+function say() {
+    console.log(`My name is ${this.name || 'default'}`);
+}
+say.myCall(me);
+```
+
 6. Apply
 
-7. 柯里化：只传递给函数一部分参数来调用他，让他返回一个汗水去处理剩下的参数
+```js
+Function.prototype.myApply = function(context = globalThis) {
+    //关键步骤：在context上调用方法，触发this绑定为context， 使用Symbol防止原有属性覆盖
+    const key = Symbol('key')
+    context[key] = this;
+    let res;
+    if (arguments[1]) {
+        res = context[key](...arguments[1]);
+    } else {
+        res = context[key]();
+    }
+    delete context[key];
+    return res;
+}
+
+//test
+const me = {name: 'Jack'};
+function say() {
+    console.log(`My name is ${this.name || 'default'}`);
+}
+say.myApply(me);
+```
+
+7. 柯里化：只传递给函数一部分参数来调用他，让他返回一个函数去处理剩下的参数
+
+```js
+function curry(func) {
+    return function curried(...args) {
+        //function.length 用来获取函数的形参个数；arguments.length获取实参个数
+        if (args.length >= func.length) {
+            return func.apply(this, args);
+        }
+        return function(...args2) {
+            return curried.apply(this, args.concat(args2))
+        }
+    }
+}
+
+//test
+function sum(a, b, c) {
+    return a + b + c;
+}
+const curriedSum = curry(sum);
+console.log(curriedSum(1, 2, 3));
+console.log(curriedSum(1)(2, 3));
+console.log(curriedSum(1),(2),(3));
+```
 
 8. 图片懒加载
+
+```js
+function isVisible(el) {
+    const position = el.getBound
+}
+```
 
 9. 对象扁平化
 
