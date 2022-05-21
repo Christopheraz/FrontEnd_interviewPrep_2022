@@ -177,13 +177,99 @@ console.log(curriedSum(1),(2),(3));
 8. 图片懒加载
 
 ```js
+// <img src = "default.png" data-src = "https://XXXX/real.png">
 function isVisible(el) {
-    const position = el.getBound
+    const position = el.getBoundingClientRect();
+    const windowHeight = DocumentElement.clientHeight;
+    //顶部边缘可见
+    const topVisible = position.top > 0 && position.top < windowHeight;
+    //底部边缘可见
+    const bottomVisible = position.bottom < windowHeight && position.bottom > 0;
+    return topVisible || bottomVisible;
 }
+
+function imageLazyLoad() {
+    const images = document.querySelectorAll('img')
+    for (let img of images) {
+        const realSrc = img.dataset.src;
+        if (!realSrc) continue;
+        if (isVisible(img)) {
+            img.src = realSrc;
+            img.dataset.src = '';
+        }
+    }
+}
+
+//test
+// window.addEventListener('load', imageLazyLoad);
+// window.addEventListener('scroll', imageLazyLoad);
+
+//or
+// window.addEventListener('scroll',throttle(imageLazyLoad, 1000));
 ```
 
 9. 对象扁平化
 
+```js
+function objectFlat(obj = {}) {
+    const res = {};
+    function flat(item, preKey = '') {
+        Object.entries(item).forEach(([key, val]) => {
+            const newKey = preKey ? `${preKey}.${key}` : key;
+            if (val && typeof val === 'object') {
+                flat(val, newKey)
+            }
+        })
+    }
+    flat(obj);
+    return res;
+}
+
+//test
+const src = {a: {b: {c: 1, d: 2}, e: 3}, f: {g: 2}};
+console.log(objectFlat(src));
+```
+
 10. 数组扁平化
 
+```js
+//Solution1
+function recursionFlat(ary = []) {
+    const res = [];
+    ary.forEach(item => {
+        if (Array.isArray(item)) {
+            res.push(...recursionFlat(item));
+        } else {
+            res.push(item);
+        }
+    })
+    return res;
+}
+//solution2
+function reduceFlat(ary = []) {
+    return ary.reduce((res, item) => 
+        res.concat(Array.isArray(item) ? reduceFlat(item) : item), [])
+}
+
+//test
+const src = [1, 2, [3, 4, [5, 6]], '7'];
+console.log(recursionFlat(src));
+console.log(reduceFlat(src));
+```
+
 11. 异步并发数限制
+
+```js
+/* 主要步骤：
+1. new Promise意境创建，立即执行
+2. 使用Promise.reslove().then可以吧任务添加到微任务队列，防止立即执行迭代方法
+3. 微任务处理过程中， 产生的新的微任务，会在同一事件循环内，追加到微任务队列里
+4. 使用race再某个任务完成时，继续添加任务，保持任务按照最大并发数进行执行
+5. 任务完成后，想需要从doingTask中移出 
+
+*/
+function limit(count, array, iterateFunc) {
+    const task = [];
+    
+}
+```
