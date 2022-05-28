@@ -1,8 +1,8 @@
 49个常用的JavaScript方法封装
 
-1、输入一个值，返回其数据类型**；
-2、数组去重；
-3、字符串去重；
+
+
+
 4 深拷贝 浅拷贝；
 5、reverse 底层原理和扩展；
 6、圣杯模式的继承；
@@ -25,11 +25,75 @@
 23、运动函数；
 24、弹性运动；
 
+1、输入一个值，返回其数据类型**；
+
+```js
+function type(para) {
+    return Object.prototype.toString.call(para)
+}
+```
+
+2、数组去重；
+
+```js
+function unique1(arr) {
+    return [...new Set(arr)]
+}
+
+function unique2(arr) {
+    const obj = {};
+    return arr.filter(ele => {
+        if (!obj[ele]) {
+            obj[ele] = true;
+            return true;
+        }
+    })
+}
+
+function unique3(arr) {
+    const result = [];
+    arr.forEach(ele => {
+        if (result.indexOf(ele) == -1) {
+            result.push(ele)
+        }
+    });
+    return result;
+}
+```
+
+3、字符串去重；
+
+```js
+String.prototype.unique = function() {
+    const obj = {};
+    const str = '';
+    const len = this.length;
+    for (let i = 0; i < len; i++) {
+        if (!obj[this[i]]) {
+            str += this[i];
+            obj[this[i]] = true;
+        }
+    }
+    return str;
+}
+function uniq(str) {
+    return str.replace(/(\w)\1+/g, '$1')
+}
+```
+
 ```js
 
 ```
 
-```py3
+```js
+
+```
+
+```js
+
+```
+
+```js
 
 ```
 
