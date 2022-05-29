@@ -716,7 +716,6 @@ const downloadFile = function(base64, fileName) { //base64图片下载功能
 
 28. 浏览器是否支持webP格式图片
 
-
 ```js
 const isSupportWebP = function() { //判断浏览器是否支持webP格式图片
     return !![].map && document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') == 0;
@@ -812,15 +811,15 @@ const debounce = function(func, wait, immediate) { //函数防抖[func 函数,wa
 
 ```js
 const throttle = function(func, wait ,type) { //函数节流 [func 函数 wait 延迟执行毫秒数 type 1 表时间戳版，2 表定时器版]
-    if(type===1){
+    if(type === 1){
         let previous = 0;
-    }else if(type===2){
+    }else if(type === 2){
         let timeout;
     }
     return function() {
         let context = this;
         let args = arguments;
-        if(type===1){
+        if(type === 1){
             let now = Date.now();
             if (now - previous > wait) {
                 func.apply(context, args);
