@@ -3,6 +3,14 @@
 1、输入一个值，返回其数据类型**；
 
 ```js
+
+```
+
+```js
+
+```
+
+```js
 function type(para) {
     return Object.prototype.toString.call(para)
 }
@@ -384,61 +392,210 @@ Element.prototype.getElementsByClassName = Document.prototype.getElementsByClass
 23、运动函数；
 
 ```js
+const { clearInterval } = require("timers");
 
+function animate(obj, json, callback) {
+    clearInterval(obj.timer);
+    let speed;
+    let current;
+    obj.timer = setInterval(function() {
+        const lock = true;
+        for (let prop in json) {
+            if (prop == 'opacity') {
+                current = parseFloat(window.getComputedStyle(obj, null)[prop]) * 100;
+            } else {
+                current = parseInt(window.getComputedStyle(obj, null)[prop]);
+            }
+            speed = (json[prop] - current) / 7;
+            speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed);
+            if (prop == 'opacity') {
+                obj.style[prop] = (current + speed) / 100;
+            } else {
+                obj.style[prop] = current + speed + 'px';
+            }
+            if (current != json[prop]) {
+                lock = false;
+            }
+        }
+        if (lock) {
+            clearInterval(obj.timer);
+            typeof callback == 'function' ? callback() : '';
+        }
+    }, 30)
+}
 ```
 
 24、弹性运动；
 
 ```js
+function ElasticMovement(obj, target) {
+    clearInterval(obj.timer);
+    let iSpeed = 4;
+    let [a, u] = [0.8, 0.8];
+    obj.timer = setInterval(function() {
+        a = (target - obj.offsetLeft) / 8;
+        iSpeed = iSpeed + a;
+        iSpeed = iSpeed * u;
+        if (Math.abs(iSpeed) <= 1 && Math.abs(a) <= 1) {
+            clearInterval(obj.timer);
+            obj.style.left = target + 'px';
+        } else {
+            obj.style.left = obj.offsetLeft + iSpeed + 'px';
+        }
+    }, 30)
 
+}
 ```
 
 25、封装自己的forEach 方法；
 
+```js
+Array.prototype.myforEach = function(func, obj) {
+    let len = this.length;
+    let _this = arguments[1] ? arguments[1] : window;
+    for (let i = 0; i < len; i++) {
+        func.call(_this. this[i], i, this)
+    }
+}
+```
+
 26、封装自己的filter方法；
+
+```js
+Array.prototype.myMap = function(func) {
+    const arr = [];
+    const len = this.length;
+    const _this = arguments[1] || window;
+    for (let i = 0; i < len; i++) {
+        if (func.apply(_this, [this[i], i, this]) == false) {
+            flag = false;
+            break;
+        }
+    }
+    return flag;
+}
+```
 
 27、数组map方法；
 
+Array.prototype.my
+
 28、数组every方法；
+
+
 
 29、数组reduce 方法：
 
+
+
 30、获取url中的参数；
+
+
 
 31、数组排序；
 
+
+
 32、遍历 Dom树；
+
+
 
 33、原生js封裝 aiax;
 
+
+
 34 异步加载script;
+
+
 
 35 cookie 管理；
 
+
+
 36、实现bind0方法；
+
+```js
+
+```
 
 37、实现 call（方法；
 
+```js
+
+```
+
 38、实现applyQ方法；
+
+```js
+
+```
 
 39、防抖；
 
+```js
+
+```
+
 40、节流；
+
+```js
+
+```
 
 41、requestAnimFrame 兼容性方法；
 
+```js
+
+```
+
 42、cancelAnimFrame 兼容性方法；
+
+```js
+
+```
 
 43、jsonp 底层方法；
 
+```js
+
+```
+
 44、获取url上的参数；
+
+```js
+
+```
 
 45、格式化时间；
 
+```js
+
+```
+
 46、验证邮箱的正则表达式；
+
+```js
+
+```
+
+```js
+
+```
 
 47、函数柯里化；
 
+```js
+
+```
+
 48、大数相加；
 
+```js
+
+```
+
 49、单例模式；
+
+```js
+
+```
